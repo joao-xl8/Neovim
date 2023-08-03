@@ -5,7 +5,6 @@ lsp.ensure_installed({
 	'eslint',
 	'rust_analyzer',
   'pyright',
-  'gopls',
   'bashls',
   'vimls',
   'yamlls',
@@ -16,9 +15,6 @@ lsp.ensure_installed({
   'graphql',
   'tailwindcss',
   'svelte',
-  'svelte-check',
-  'svelte-language-server',
-  'sumneko_lua',
 })
 
 lsp.on_attach(function(client, bufnr)
