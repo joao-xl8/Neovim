@@ -50,6 +50,7 @@ return require('packer').startup(function(use)
             { 'L3MON4D3/LuaSnip' },     -- Required
         }
     }
+    use { 'kkharji/lspsaga.nvim' }
     use('siduck76/NvChad')
     use('nvim-lualine/lualine.nvim')
 
