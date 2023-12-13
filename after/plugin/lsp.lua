@@ -16,6 +16,9 @@ lsp.ensure_installed({
   'tailwindcss',
   'svelte',
 })
+require'lspconfig'.ccls.setup{
+  offset_encoding = 'utf-8',
+}
 
 lsp.on_attach(function(client, bufnr)
   local opts = { buffer = bufnr, remap = false }
