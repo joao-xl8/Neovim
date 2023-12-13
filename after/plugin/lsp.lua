@@ -16,9 +16,9 @@ lsp.ensure_installed({
   'tailwindcss',
   'svelte',
 })
-require'lspconfig'.ccls.setup{
-  offset_encoding = 'utf-8',
-}
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities.offsetEncoding = { "utf-16" }
+require("lspconfig").clangd.setup({ capabilities = capabilities })
 
 lsp.on_attach(function(client, bufnr)
   local opts = { buffer = bufnr, remap = false }
