@@ -1,15 +1,10 @@
--- This file can be loaded by calling `lua require('plugins')` from your init.vi=m
-
--- Only required if you have packer configured as `opt`
 vim.cmd [[packadd packer.nvim]]
 
 return require('packer').startup(function(use)
-  -- Packer can manage itself
   use 'wbthomason/packer.nvim'
   use 'theprimeagen/vim-be-good'
   use {
     'nvim-telescope/telescope.nvim', tag = '0.1.2',
-    -- or                            , branch = '0.1.x',
     requires = {
       { 'nvim-lua/plenary.nvim' },
       { "nvim-telescope/telescope-live-grep-args.nvim" },
@@ -20,14 +15,6 @@ return require('packer').startup(function(use)
   use 'sindrets/diffview.nvim'
   use "xiyaowong/transparent.nvim"
 
-  --use({
-  --    'rose-pine/neovim',
-  --    as = 'rose-pine',
-  --    config = function()
-  --        vim.cmd('colorscheme rose-pine')
-  --    end
-  --})
-  --use("rebelot/kanagawa.nvim")
   use { "catppuccin/nvim", as = "catppuccin" }
   use('nvim-treesitter/nvim-treesitter', { run = ':TSUpdate' })
   use('nvim-treesitter/playground')
@@ -56,12 +43,10 @@ return require('packer').startup(function(use)
     }
   }
   use { 'kkharji/lspsaga.nvim' }
-  -- use('siduck76/NvChad')
   use('nvim-lualine/lualine.nvim')
 
   use('kyazdani42/nvim-web-devicons')   -- OPTIONAL: for file icons
   use('lewis6991/gitsigns.nvim')        -- OPTIONAL: for git status
-  -- use('romgrk/barbar.nvim')
   use { 'akinsho/toggleterm.nvim', tag = 'v2.*' }
   use('ryanoasis/vim-devicons')
   use {
