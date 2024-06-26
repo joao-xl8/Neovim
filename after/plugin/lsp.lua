@@ -18,7 +18,11 @@ lsp.ensure_installed({
 })
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities.offsetEncoding = { "utf-16" }
-require("lspconfig").clangd.setup({ capabilities = capabilities })
+require("lspconfig").clangd.setup({ capabilities = capabilities,
+  init_options = {
+    fallbackFlags = {'-std=c++20'}
+  },
+})
 
 lsp.on_attach(function(client, bufnr)
   local opts = { buffer = bufnr, remap = false }

@@ -1,4 +1,4 @@
-
+-- test2
 local function my_nvim_tree_on_attach(bufnr)
   local api = require "nvim-tree.api"
 
@@ -19,6 +19,7 @@ require("nvim-tree").setup({
     view = {
         width = 30,
         adaptive_size = true,
+        side = "right",
     },
     renderer = {
         group_empty = true,
@@ -75,7 +76,7 @@ require("nvim-tree").setup({
         },
     },
     filters = {
-        dotfiles = true,
+        dotfiles = false,
     },
     on_attach = my_nvim_tree_on_attach,
 })
