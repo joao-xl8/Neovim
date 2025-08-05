@@ -1,70 +1,82 @@
-local lsp = require('lsp-zero').preset('recommended')
+local lsp_zero = require('lsp-zero')
 
-lsp.ensure_installed({
-	'tsserver',
-	'eslint',
-	'rust_analyzer',
-  'pyright',
-  'bashls',
-  'vimls',
-  'yamlls',
-  'jsonls',
-  'dockerls',
-  'html',
-  'cssls',
-  'graphql',
-  'tailwindcss',
-  'svelte',
-})
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities.offsetEncoding = { "utf-16" }
-require("lspconfig").clangd.setup({ capabilities = capabilities,
-  init_options = {
-    fallbackFlags = {'-std=c++20'}
-  },
-})
-
-lsp.on_attach(function(client, bufnr)
+lsp_zero.on_attach(function(client, bufnr)
   local opts = { buffer = bufnr, remap = false }
 
-
+  -- Standard LSP keymaps
   vim.keymap.set('n', 'gd', function() vim.lsp.buf.definition() end, opts)
-
-  lsp.default_keymaps({buffer = bufnr})
-  --- In lsp attach function
-  local map = vim.api.nvim_buf_set_keymap
-
-  map(0, "n", "gr", "<cmd>Lspsaga rename<cr>", {silent = true, noremap = true})
-  map(0, "n", "gx", "<cmd>Lspsaga code_action<cr>", {silent = true, noremap = true})
-  map(0, "x", "gx", ":<c-u>Lspsaga range_code_action<cr>", {silent = true, noremap = true})
-  map(0, "n", "K",  "<cmd>Lspsaga hover_doc<cr>", {silent = true, noremap = true})
-  map(0, "n", "L", "<cmd>Lspsaga show_line_diagnostics<cr>", {silent = true, noremap = true})
-  map(0, "n", "gj", "<cmd>Lspsaga diagnostic_jump_next<cr>", {silent = true, noremap = true})
-  map(0, "n", "gk", "<cmd>Lspsaga diagnostic_jump_prev<cr>", {silent = true, noremap = true})
-  map(0, "n", "<C-u>", "<cmd>lua require('lspsaga.action').smart_scroll_with_saga(-1, '<c-u>')<cr>", {})
-  map(0, "n", "<C-d>", "<cmd>lua require('lspsaga.action').smart_scroll_with_saga(1, '<c-d>')<cr>", {})
+  vim.keymap.set('n', 'gr', function() vim.lsp.buf.references() end, opts)
+  vim.keymap.set('n', 'K', function() vim.lsp.buf.hover() end, opts)
+  vim.keymap.set('n', '<leader>rn', function() vim.lsp.buf.rename() end, opts)
+  vim.keymap.set('n', '<leader>ca', function() vim.lsp.buf.code_action() end, opts)
+  vim.keymap.set('n', '[d', function() vim.diagnostic.goto_prev() end, opts)
+  vim.keymap.set('n', ']d', function() vim.diagnostic.goto_next() end, opts)
+  vim.keymap.set('n', '<leader>d', function() vim.diagnostic.open_float() end, opts)
+  
+  -- Use lsp_zero default keymaps for additional functionality
+  lsp_zero.default_keymaps({buffer = bufnr})
 end)
 
-lsp.set_preferences({
-	sign_icons = {}
+-- Mason setup
+require('mason').setup({})
+require('mason-lspconfig').setup({
+  ensure_installed = {
+    'ts_ls',
+    'eslint',
+    'rust_analyzer',
+    'pyright',
+    'bashls',
+    'vimls',
+    'yamlls',
+    'jsonls',
+    'dockerls',
+    'html',
+    'cssls',
+    'graphql',
+    'tailwindcss',
+    'svelte',
+  },
+  handlers = {
+    lsp_zero.default_setup,
+    -- Custom setup for clangd
+    clangd = function()
+      local capabilities = vim.lsp.protocol.make_client_capabilities()
+      capabilities.offsetEncoding = { "utf-16" }
+      require('lspconfig').clangd.setup({
+        capabilities = capabilities,
+        init_options = {
+          fallbackFlags = {'-std=c++20'}
+        },
+      })
+    end,
+  }
 })
 
-lsp.setup()
-
--- You need to setup `cmp` after lsp-zero
+-- CMP setup
 local cmp = require('cmp')
-local cmp_action = require('lsp-zero').cmp_action()
 
 cmp.setup({
-  mapping = {
+  mapping = cmp.mapping.preset.insert({
     -- `Enter` key to confirm completion
     ['<CR>'] = cmp.mapping.confirm({select = false}),
-
     -- Ctrl+Space to trigger completion menu
     ['<C-Space>'] = cmp.mapping.complete(),
-
     -- Navigate between snippet placeholder
-    ['<C-f>'] = cmp_action.luasnip_jump_forward(),
-    ['<C-b>'] = cmp_action.luasnip_jump_backward(),
-  }
+    ['<C-f>'] = cmp.mapping(function()
+      if require('luasnip').jumpable(1) then
+        require('luasnip').jump(1)
+      end
+    end, {'i', 's'}),
+    ['<C-b>'] = cmp.mapping(function()
+      if require('luasnip').jumpable(-1) then
+        require('luasnip').jump(-1)
+      end
+    end, {'i', 's'}),
+  }),
+  sources = cmp.config.sources({
+    {name = 'nvim_lsp'},
+    {name = 'luasnip'},
+  }, {
+    {name = 'buffer'},
+  })
 })

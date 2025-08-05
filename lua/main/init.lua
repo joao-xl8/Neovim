@@ -1,2 +1,2 @@
-require("jbarros.remap")
-require("jbarros.set")
+require("main.remap")
+require("main.set")

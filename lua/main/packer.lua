@@ -24,7 +24,7 @@ return require('packer').startup(function(use)
   use { 'nvim-tree/nvim-tree.lua', requires = { 'nvim-tree/nvim-web-devicons' } }
   use {
     'VonHeikemen/lsp-zero.nvim',
-    branch = 'v2.x',
+    branch = 'v3.x',
     requires = {
       -- LSP Support
       { 'neovim/nvim-lspconfig' },       -- Required
@@ -42,7 +42,7 @@ return require('packer').startup(function(use)
       { 'L3MON4D3/LuaSnip' },           -- Required
     }
   }
-  use { 'kkharji/lspsaga.nvim' }
+  use { 'nvimdev/lspsaga.nvim' }
   use('nvim-lualine/lualine.nvim')
 
   use('kyazdani42/nvim-web-devicons')   -- OPTIONAL: for file icons
